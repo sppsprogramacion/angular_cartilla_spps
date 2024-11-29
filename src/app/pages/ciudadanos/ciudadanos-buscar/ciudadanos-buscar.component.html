@@ -1,0 +1,168 @@
+<div class="grid">
+    <div class="col-12 xl:col-12">
+        <div class="card">
+            <p-toolbar styleClass="mb-3 bg-cyan-500">
+                <h5 class="block text-white  font-bold font-medium mb-1">Buscar ciudadano</h5>
+            </p-toolbar>
+            <div class="bg-cyan-600">
+
+            </div>
+
+            <div class="p-formgrid grid">                
+                <!-- FORMULARIO BUSCAR -->
+                <div class="col-12">  
+                    <form [formGroup]="formaBuscar">
+                        <!-- CARD DATOS BUSQUEDA-->
+                        <div class="card p-fluid">                            
+                            <div class="formgrid grid">
+                                <div class="field col-12 md:col-6 lg:col-6">
+                                    <label for="id_tipo_busqueda">Tipo busqueda</label>
+                                    <p-dropdown id="id_tipo_busqueda" [options]="listTiposBusqueda" optionLabel="tipo_busqueda_ciudadano" optionValue="id_tipo_busqueda_ciudadano" formControlName="id_tipo_busqueda" placeholder="Seleccionar...">
+                                    </p-dropdown>
+                                </div>
+
+                                <div class="field col-12 md:col-6 lg:col-6">
+                                    <label for="buscar">Buscar</label>
+                                    <input type="text" pInputText id="buscar" formControlName="buscar" />
+                                    <small *ngIf="isValid('buscar')" class="p-error">
+                                        <div *ngFor="let validation of user_validation_messages.buscar" >
+                                            <div  *ngIf="formaBuscar.get('buscar')?.hasError(validation.type)">
+                                                {{validation.message}}
+                                            </div>
+                                        </div>
+                                    </small>
+                                </div>
+                                
+                            </div>
+
+                            <!-- boton buscar -->
+                            <div  class="col-12 grid justify-content-between">
+                                <button pButton pRipple type="button" label="Buscar" class="p-button-primary" style="width: 47%;" (click)="buscarCiudadanos()" ></button>
+                                
+                            </div>
+                        </div>
+                        <!-- FIN CARD DATOS BUSQUEDA -->
+                        
+                    </form>
+                </div>
+                <!--  FIN FORMULARIO BUSCAR -->
+                
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="card">
+
+            <h5>Ciudadanos</h5>
+            
+            <!-- TABLA DE CIUDADANOS -->
+            <p-table #dt1 [value]="listCiudadanos" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-striped" [paginator]="true" [globalFilterFields]="['dni','apellido','nombre']" responsiveLayout="scroll">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <button pButton label="Limpiar" class="p-button-outlined mb-2" icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
+                        <span class="p-input-icon-left mb-2">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Buscar palabra" class="w-full"/>
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem"></th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                DNI
+                                <p-columnFilter type="text" field="dni" display="menu" placeholder="Buscar por dni"></p-columnFilter>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Apellido
+                                <p-columnFilter type="text" field="apellido" display="menu" placeholder="Buscar por apellido"></p-columnFilter>
+
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Nombre
+                                <p-columnFilter type="text" field="nombre" display="menu" placeholder="Buscar por nombre"></p-columnFilter>
+
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Sexo
+                                <p-columnFilter type="text" field="sexo.sexo" display="menu" placeholder="Buscar por sexo"></p-columnFilter>
+
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Fecha Nac                                
+                            </div>
+                        </th>
+                        
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Telefono
+
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                E-mail
+                                
+                            </div>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-ciudadano>
+                    <tr>
+                        <td>
+                            <button type="button" pButton pRipple class="p-button-rounded p-button-info mr-2 mb-2" icon="pi pi-eye" (click)="administrarCiudadano(ciudadano)"></button>
+                        </td>
+                        <td style="min-width: 10rem;">
+                            {{ciudadano.dni}}
+                        </td>
+
+                        <td style="min-width: 15rem;">
+                            {{ciudadano.apellido}}
+                        </td>
+                        <td style="min-width: 15rem;">
+                            {{ciudadano.nombre}}
+                        </td>
+                        <td style="min-width: 10rem;">
+                            {{ciudadano.sexo.sexo}}
+                        </td>
+                        <td style="min-width: 5rem;">
+                            {{ciudadano.fecha_nac| date: 'dd/MM/yyyy'}}
+                        </td>
+                        <td style="min-width: 10rem;">
+                            {{ciudadano.telefono}}
+                        </td>
+                        <td style="min-width: 15rem;">
+                            {{ciudadano.email}}
+                        </td>
+
+
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="8">No se encontraron ciudadanos.</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="8">Cargando ciudadanos... .</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <!-- FIN TABLA DE CIUDADANOS -->
+
+            
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,98 @@
+<div class="grid">
+    <div class="col-12 xl:col-12">
+        <div class="card">
+            <p-toolbar styleClass="mb-3 bg-cyan-500 ">
+                <h5 class="block text-white font-bold font-medium mb-1 ">
+                    Trámites finalizados
+                </h5>
+            </p-toolbar>
+            <!-- TABLA DE TRAMITES -->
+            <p-table #dt1 [value]="listTramites" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-striped" [paginator]="true" [globalFilterFields]="['asunto','sector.sector','expediente_nota','persona_referencia','descripcion']" responsiveLayout="scroll">
+                
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem"></th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Nº Trámite
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                DNI solicitante
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Objeto
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Fecha trámite
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Expediente
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Fecha expediente
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Centro Mediación
+                            </div>
+                        </th>
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-tramite>
+                    <tr>
+                        <td>                            
+                            <button pButton pRipple type="button" icon="pi pi-folder-open text-bluegray-100" class="p-button-secondary p-button-rounded mr-1 mb-1" (click)="administrarTramite(tramite)"></button>
+                        </td>
+                        <td style="min-width: 10rem;">
+                            {{tramite.numero_tramite}}
+                        </td>
+                        <td style="min-width: 10rem;">
+                            {{tramite.ciudadano.dni}}
+                        </td>
+                        <td style="min-width: 15rem;">
+                            {{tramite.objeto.objeto}}
+                        </td>
+                        <td style="min-width: 8rem;">
+                            {{tramite.fecha_tramite| date: 'dd/MM/yyyy'}}
+                        </td>
+                        <td style="min-width: 10rem;">
+                            {{tramite.expediente}}
+                        </td>
+                        <td style="min-width: 8rem;">
+                            {{tramite.fecha_expediente| date: 'dd/MM/yyyy'}}
+                        </td>
+                        <td style="min-width: 15rem;">
+                            {{tramite.centro_mediacion.centro_mediacion}}
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="8">No se encontraron trámites finalizados.</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="8">Cargando trámites... .</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <!-- FIN TABLA DE TRAMITES -->
+           
+        </div>
+
+    </div>
+</div>

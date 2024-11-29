@@ -1,0 +1,152 @@
+<div class="grid">
+    <div class="col-12 xl:col-12">
+        <div class="card">
+            <p-toolbar styleClass="mb-3 bg-cyan-500 ">
+                <h5 class="block text-white font-bold font-medium mb-1 ">
+                    Trámites nuevos
+                </h5>
+            </p-toolbar>
+            <!-- TABLA DE TRAMITES -->
+            <p-table #dt1 [value]="listTramites" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-striped" [paginator]="true" [globalFilterFields]="['asunto','sector.sector','expediente_nota','persona_referencia','descripcion']" responsiveLayout="scroll">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <button pButton label="Solicitar trámite" icon="pi pi-plus" class="p-button-info mr-2" (click)="openDialogDatosPersonales()"></button>
+
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem"></th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Nº Tramite
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                DNI solicitante
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Objeto
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Fecha tramite
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Expediente
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Fecha expediente
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Centro Mediacion 
+                            </div>
+                        </th>
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-tramite>
+                    <tr>
+                        <td>
+                            <button *ngIf="tramite.estado_tramite_id==1" pButton pRipple type="button" icon="pi pi-folder-open text-purple-100" class="p-button-secondary p-button-rounded bg-purple-500 mr-1 mb-1" (click)="administrarTramite(tramite)"></button>
+                            <button *ngIf="tramite.estado_tramite_id==2" pButton pRipple type="button" icon="pi pi-folder-open text-orange-100" class="p-button-secondary p-button-rounded bg-orange-500 mr-1 mb-1" (click)="administrarTramite(tramite)"></button>
+                        </td>
+                        <td style="min-width: 10rem;">
+                            {{tramite.numero_tramite}}
+                        </td>
+                        <td style="min-width: 10rem;">
+                            {{tramite.ciudadano.dni}}
+                        </td>
+                        <td style="min-width: 15rem;">
+                            {{tramite.objeto.objeto}}
+                        </td>
+                        <td style="min-width: 8rem;">
+                            {{tramite.fecha_tramite| date: 'dd/MM/yyyy'}}
+                        </td>
+                        <td style="min-width: 10rem;">
+                            {{tramite.expediente}}
+                        </td>
+                        <td style="min-width: 8rem;">
+                            {{tramite.fecha_expediente| date: 'dd/MM/yyyy'}}
+                        </td>
+                        <td style="min-width: 15rem;">
+                            {{tramite.centro_mediacion.centro_mediacion}}
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="8">No se encontraron tramites finalizados.</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="8">Cargando tramites... .</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <!-- FIN TABLA DE TRAMITES -->
+            <!-- DIALOG CONFIRMAR DATOS PERSONALES-->
+            <p-dialog id="datosPersonalesDialog" [(visible)]="datosPersonalesDialog" [style]="{width: '500px','min-height':'350px'}" class="p-fluid" header="Verificar datos personales" [closable]="false" [modal]="true">
+                
+
+                <ng-template pTemplate="content">
+                    <div class="col-12 border-bottom-2 surface-border">
+                        <div class="grid">
+                            <div class="col-12 lg:col-12 xl:col-12">
+                                <span class="text font-medium text-1xl">Apellido y nombre:<span class="text ml-1 font-medium"> {{dataCiudadano.apellido}} {{dataCiudadano.nombre}}</span></span>
+                            </div>                    
+                        </div>
+                    </div>
+                    <div class="col-12 border-bottom-2 surface-border">
+                        <div class="grid">                    
+                            <div class="col-12 lg:col-12 xl:col-12">
+                                <span class="text font-medium text-1xl">DNI:<span class="text ml-1 font-medium"> {{dataCiudadano.dni}}</span></span>
+                            </div>
+                            <div class="col-12 lg:col-12 xl:col-12">
+                                <span class="text font-medium text-1xl">Fecha de Nacimiento:<span class="text ml-1 font-medium"> {{dataCiudadano.fecha_nac| date: 'dd/MM/yyyy' }}</span></span>
+                            </div>
+                            <div class="col-12 lg:col-12 xl:col-12">
+                                <span class="text font-medium text-1xl">Sexo:<span class="text ml-1 font-medium"> {{dataCiudadano.sexo.sexo}}</span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 border-bottom-2 surface-border">
+                        <div class="grid">
+                            <div class="col-12 lg:col-12 xl:col-12">
+                                <span class="text font-medium text-1xl">Telefono:<span class="text ml-1 font-medium"> {{dataCiudadano.telefono}} </span></span>
+                            </div>
+                            <div class="col-12 lg:col-12 xl:col-12">
+                                <span class="text font-medium text-1xl">Email:<span class="text ml-1 font-medium"> {{dataCiudadano.email}} </span></span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <p-messages [(value)]="msgsDatosPersonales" [enableService]="false" [closable]="false"></p-messages>
+                        
+                </ng-template>
+
+                <ng-template pTemplate="footer" class="mt-1">           
+                    
+                    <button pButton pRipple type="button" label="Continuar" class="p-button-outlined p-button-success mr-2 mb-2" (click)="abrirNuevoTramite()"></button>
+                    <button pButton pRipple type="button" label="Modificar datos" class="p-button-outlined p-button-warning mr-2 mb-2" (click)="abrirModificarDatosPersonales()"></button>
+                    <button pButton pRipple type="button" label="Cancelar" class="p-button-outlined p-button-danger mr-2 mb-2" (click)="hideDialogDatosPersonales()"></button>
+                </ng-template>
+            </p-dialog>
+            <!-- FIN DIALOG CONFIRMAR DATOS PERSONALES -->
+
+        </div>
+
+    </div>
+</div>
